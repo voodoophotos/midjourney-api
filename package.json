@@ -1,5 +1,5 @@
 {
-  "name": "midjourney",
+  "name": "voodoophotos/midjourney-api",
   "version": "4.0.0",
   "description": "Node.js client for the unofficial MidJourney API.",
   "main": "libs/index.js",
@@ -52,5 +52,8 @@
     "snowyflake": "^2.0.0",
     "tslib": "^2.5.0",
     "ws": "^8.13.0"
+  },
+  "publishConfig": {
+    "@voodoophotos:registry": "https://npm.pkg.github.com"
   }
 }
