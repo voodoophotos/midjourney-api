@@ -469,11 +469,6 @@ export class WsMessage {
   }
   private getEventByContent(content: string) {
 
-    if(this.fallBackEvent != null) {
-      console.error("Using fallback event: ", this.fallBackEvent);
-      return this.fallBackEvent;
-    }
-    
     const prompt = content2prompt(content);
     //fist del message
     for (const [key, value] of this.waitMjEvents.entries()) {
@@ -489,6 +484,11 @@ export class WsMessage {
       if (prompt === content2prompt(value.prompt as string)) {
         return value;
       }
+    }
+
+    if(this.fallBackEvent != null) {
+      console.error("Using fallback event: ", this.fallBackEvent);
+      return this.fallBackEvent;
     }
   }
 
@@ -673,6 +673,7 @@ export class WsMessage {
         },
       });
       this.onceImage(nonce, handleImageMessage);
+      this.fallBackEvent = { nonce };
     });
   }
   async waitDescribe(nonce: string) {
