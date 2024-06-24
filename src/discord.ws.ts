@@ -33,6 +33,7 @@ export class WsMessage {
   private reconnectTime: boolean[] = [];
   private heartbeatInterval = 0;
   public UserId = "";
+  private fallBackEvent : any;
   constructor(public config: MJConfig, public MJApi: MidjourneyApi) {
     this.ws = new this.config.WebSocket(this.config.WsBaseUrl);
     this.ws.addEventListener("open", this.open.bind(this));
@@ -467,6 +468,12 @@ export class WsMessage {
     this.emitImage(event.nonce, eventMsg);
   }
   private getEventByContent(content: string) {
+
+    if(this.fallBackEvent != null) {
+      console.error("Using fallback event: ", this.fallBackEvent);
+      return this.fallBackEvent;
+    }
+    
     const prompt = content2prompt(content);
     //fist del message
     for (const [key, value] of this.waitMjEvents.entries()) {
@@ -594,6 +601,8 @@ export class WsMessage {
     //FIXME: addWaitMjEvent
     this.waitMjEvents.set(nonce, { nonce });
     this.event.push({ event: nonce, callback: once });
+
+    this.fallBackEvent = { nonce };
   }
   private removeSkipMessageId(messageId: string) {
     const index = this.skipMessageId.findIndex((id) => id !== messageId);
